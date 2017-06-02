@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_color_option_labels">
+        <item>@string/pref_label_populer</item>
+        <item>@string/pref_label_toprate</item>
+        <item>@string/pref_label_nowplaying</item>
+        <item>@string/pref_label_upcoming</item>
+    </array>
+
+    <array name="pref_color_option_values">
+        <item>@string/pref_populer</item>
+        <item>@string/pref_top_rated</item>
+        <item>@string/pref_now_playing</item>
+        <item>@string/pref_upcoming</item>
+    </array>
+</resources>

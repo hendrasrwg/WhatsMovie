@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.me.whatsmovie.MainActivity;
 import com.example.me.whatsmovie.R;
@@ -15,6 +16,7 @@ import com.example.me.whatsmovie.helper.GlideClient;
 import com.example.me.whatsmovie.helper.ItemClick;
 import com.example.me.whatsmovie.model.PopulerResponse;
 import com.example.me.whatsmovie.model.ResultsItem;
+import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,19 +66,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @BindView(R.id.img)
         ImageView img;
         @BindView(R.id.rating)
-        RatingBar ratingBar;
+        SimpleRatingBar ratingBar;
+        @BindView(R.id.tv)
+        TextView textView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            ratingBar.setNumStars(10);
-            ratingBar.setMax(10);
+            //ratingBar.setNumStars(10);
+            ratingBar.setMaxStarSize(10);
         }
 
         void bind(final ResultsItem response, Context context, final ItemClick itemClick) {
-            GlideClient.downloadImage(context, BaseConfig.BASE_URL+response.getPosterPath(),img);
+            GlideClient.downloadImage(context, BaseConfig.BASE2_URL+response.getPosterPath(),img);
             Float rating = Float.valueOf((float) response.getVoteAverage());
             ratingBar.setRating(rating);
+            ratingBar.setClickable(false);
+            textView.setText(String.valueOf(rating)+"/10");
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

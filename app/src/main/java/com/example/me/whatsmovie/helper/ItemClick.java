@@ -8,4 +8,5 @@ import com.example.me.whatsmovie.model.ResultsItem;
 
 public interface ItemClick {
     void onItemClick(int id);
+    void onTrailerClick(String key);
 }

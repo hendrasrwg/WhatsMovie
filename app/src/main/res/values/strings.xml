@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">WhatsMovie</string>
+    <string name="pref_populer" translatable="false">popular</string>
+    <string name="pref_top_rated" translatable="false">top_rated</string>
+    <string name="pref_upcoming" translatable="false">upcoming</string>
+    <string name="pref_latest" translatable="false">latest</string>
+    <string name="pref_now_playing" translatable="false">now_playing</string>
+
+
+    <string name="pref_label_populer">Populer</string>
+    <string name="pref_label_toprate">Top Rate</string>
+    <string name="pref_label_upcoming">Upcoming</string>
+    <string name="pref_label_latest">Latest</string>
+    <string name="pref_label_nowplaying">Now Playing</string>
+
+    <string name="pref_category_key" translatable="false">category</string>
 </resources>
