@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.me.whatsmovie.adapter.MovieAdapter;
+import com.example.me.whatsmovie.dagger.MainApplication;
 import com.example.me.whatsmovie.helper.ItemClick;
 import com.example.me.whatsmovie.model.PopulerResponse;
 import com.example.me.whatsmovie.model.ResultsItem;
@@ -27,8 +28,11 @@ import com.example.me.whatsmovie.network.Network;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -45,11 +49,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick, Shared
     int page=1;
     int totalpage;
 
+    @Inject
+    ApiInterface service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        MainApplication application = (MainApplication) getApplication();
+        application.getmApplicationComponent().inject(this);
         rv.setItemAnimator(new DefaultItemAnimator());
         adapter = new MovieAdapter(list,MainActivity.this);
         adapter.setItemClick(MainActivity.this);
@@ -100,7 +109,53 @@ public class MainActivity extends AppCompatActivity implements ItemClick, Shared
         }
         getSupportActionBar().setTitle(label+" Movie");
         page=1;
-        loadDataPopuler();
+        //loadDataPopuler();
+        loaddagger();
+    }
+
+    private void loaddagger(){
+        if (page == 1){
+            progressBar.setMessage("Loading....");
+            progressBar.show();
+            progressBar.setCancelable(false);
+            list.clear();
+        }else {
+            pb.setVisibility(View.VISIBLE);
+        }
+        if (page == totalpage){
+
+        }
+        else {
+            service.getJsonPopuler(category, BuildConfig.MOVIEAPI, page)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<PopulerResponse>() {
+                        @Override
+                        public void onCompleted() {
+                            if (page == 1){
+                                progressBar.hide();
+                            }else {
+                                pb.setVisibility(View.GONE);
+                            }
+                            page++;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                            progressBar.hide();
+                        }
+
+                        @Override
+                        public void onNext(PopulerResponse response) {
+                            for (ResultsItem listItem : response.getResults()) {
+                                list.add(listItem);
+                            }
+                            totalpage = response.getTotalPages();
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+        }
     }
 
 
